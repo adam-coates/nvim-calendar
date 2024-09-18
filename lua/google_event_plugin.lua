@@ -89,6 +89,7 @@ local function create_google_event_ui()
 
 	-- Get the path to the Python script
 	local script_dir = vim.fn.expand("<sfile>:p:h:h")
+	print(script_dir)
 	local python_script_path = script_dir .. "/python/add_event.py"
 
 	-- Notify the user
