@@ -41,16 +41,45 @@ local function check_and_install_requirements()
 		return false
 	end
 
-	-- Install the Python requirements from requirements.txt
-	local script_dir = vim.fn.expand("<sfile>:p:h:h") -- Get plugin root
-	local requirements_path = script_dir .. "/python/requirements.txt"
+	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar-add"
+	-- Path to the Python requirements.txt file
+	local requirements_path = plugin_dir .. "/python/requirements.txt"
 
-	print("Installing Python dependencies...")
-	vim.cmd("!pip3 install -r " .. requirements_path)
+	-- Read the requirements.txt file
+	local requirements_file = io.open(requirements_path, "r")
+	if not requirements_file then
+		print("Error: Unable to open requirements.txt.")
+		return false
+	end
 
-	return true
+	local missing_packages = {}
+	for requirement in requirements_file:lines() do
+		-- Strip any version specifier from the requirement
+		local package_name = requirement:match("^[^=<>~]+")
+
+		-- Check if the package is installed using pip freeze
+		local check_handle = io.popen("pip3 freeze | grep '^" .. package_name .. "=='")
+		local result = check_handle:read("*a")
+		check_handle:close()
+
+		-- If the package is not found in pip freeze, add it to the missing packages list
+		if result == "" then
+			table.insert(missing_packages, requirement)
+		end
+	end
+	requirements_file:close()
+
+	if #missing_packages == 0 then
+		return true
+	else
+		-- If there are missing packages, install them
+		print("Installing missing Python dependencies...")
+		for _, requirement in ipairs(missing_packages) do
+			vim.cmd("!pip3 install " .. requirement)
+		end
+		return true
+	end
 end
-
 local function create_google_event_ui()
 	-- Ensure Python requirements are installed
 	if not check_and_install_requirements() then
@@ -88,9 +117,10 @@ local function create_google_event_ui()
 	write_event_to_yaml(file_path, event_data)
 
 	-- Get the path to the Python script
-	local script_dir = vim.fn.expand("<sfile>:p:h:h")
-	print(script_dir)
-	local python_script_path = script_dir .. "/python/add_event.py"
+	--local script_dir = vim.fn.expand("<sfile>:p:h:h")
+	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar-add"
+	local python_script_path = plugin_dir .. "/python/add_event.py"
+	--	local python_script_path = script_dir .. "/python/add_event.py"
 
 	-- Notify the user
 	print("Event written to " .. file_path)

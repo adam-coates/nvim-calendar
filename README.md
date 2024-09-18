@@ -42,4 +42,4 @@ To interact with Google Calendar, you’ll need access to the Google Calendar AP
 - Create credentials (OAuth 2.0 client ID) to get the client_id and client_secret for authenticating your application.
 - Download the credentials in JSON format.
 
-Store `JSON` in ~/.cache/nvim-calendar-add
+Store `credentials.json` in `~/.cache/nvim-calendar-add`

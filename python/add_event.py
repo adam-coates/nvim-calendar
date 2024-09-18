@@ -7,6 +7,16 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 import dateparser
+from pathlib import Path
+
+# Determine platform-specific cache directory
+if os.name == "nt":  # For Windows
+    base_cache_dir = (
+        Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+        / "nvim-calendar-add"
+    )
+else:  # For Linux/macOS
+    base_cache_dir = Path.home() / ".cache" / "nvim-calendar-add"
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
@@ -18,11 +28,8 @@ def get_plugin_dir():
 
 def authenticate_google():
     creds = None
-    token_path = os.path.join(get_plugin_dir(), "~/.cache/nvim-calendar-add/token.json")
-    credentials_path = os.path.join(
-        get_plugin_dir(), "~/.cache/nvim-calendar-add/credentials.json"
-    )
-
+    credentials_path = base_cache_dir / "credentials.json"
+    token_path = base_cache_dir / "token.json"
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     if not creds or not creds.valid:
