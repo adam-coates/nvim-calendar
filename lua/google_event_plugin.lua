@@ -1,10 +1,3 @@
-local M = {}
-
--- Helper to get the plugin directory dynamically
-local function get_plugin_dir()
-	return vim.fn.stdpath("data") .. "/lazy/google_calendar_event"
-end
-
 local function write_event_to_yaml(file_path, event_data)
 	local yaml_content = string.format(
 		[[
@@ -18,7 +11,7 @@ event:
   timezone: "%s"
   color: %s
 ---
-    ]],
+        ]],
 		event_data.summary or "",
 		event_data.start or "",
 		event_data["end"] or "",
@@ -37,7 +30,7 @@ event:
 	end
 end
 
-function M.create_google_event_ui()
+local function create_google_event_ui()
 	-- Prompt the user for input
 	local summary = vim.fn.input("Summary: ")
 	local start_time = vim.fn.input("Start Time: ")
@@ -68,12 +61,19 @@ function M.create_google_event_ui()
 	local file_path = "/tmp/neovim_google_event.yaml"
 	write_event_to_yaml(file_path, event_data)
 
+	-- Get the path to the current Lua script (relative to the plugin folder)
+	local script_dir = vim.fn.expand("<sfile>:p:h:h") -- Gets the plugin directory (lua/..)
+	local python_script_path = script_dir .. "/python/add_event.py"
+
 	-- Notify the user
 	print("Event written to " .. file_path)
 
 	-- Execute the Python script with the YAML file as an argument
-	local python_script = get_plugin_dir() .. "/lua/google_calendar_event/python/add_event.py"
-	vim.cmd("! python3 " .. python_script .. " " .. file_path)
+	vim.cmd("!python3 " .. python_script_path .. " " .. file_path)
 end
 
-return M
+-- Create user command in Neovim to trigger the event creation UI
+vim.api.nvim_create_user_command("AddGoogleEventui", function()
+	-- Call the function that handles user input and event creation
+	create_google_event_ui()
+end, {})
