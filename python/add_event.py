@@ -8,7 +8,6 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 import dateparser
 
-# Load credentials
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
@@ -19,8 +18,10 @@ def get_plugin_dir():
 
 def authenticate_google():
     creds = None
-    token_path = os.path.join(get_plugin_dir(), "token.json")
-    credentials_path = os.path.join(get_plugin_dir(), "credentials.json")
+    token_path = os.path.join(get_plugin_dir(), "~/.cache/nvim-calendar-add/token.json")
+    credentials_path = os.path.join(
+        get_plugin_dir(), "~/.cache/nvim-calendar-add/credentials.json"
+    )
 
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)

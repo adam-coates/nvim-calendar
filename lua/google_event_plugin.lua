@@ -30,7 +30,33 @@ event:
 	end
 end
 
+local function check_and_install_requirements()
+	-- Check if pip is installed
+	local handle = io.popen("command -v pip3")
+	local pip_path = handle:read("*a")
+	handle:close()
+
+	if pip_path == "" then
+		print("Error: pip3 is not installed. Please install pip3 and try again.")
+		return false
+	end
+
+	-- Install the Python requirements from requirements.txt
+	local script_dir = vim.fn.expand("<sfile>:p:h:h") -- Get plugin root
+	local requirements_path = script_dir .. "/python/requirements.txt"
+
+	print("Installing Python dependencies...")
+	vim.cmd("!pip3 install -r " .. requirements_path)
+
+	return true
+end
+
 local function create_google_event_ui()
+	-- Ensure Python requirements are installed
+	if not check_and_install_requirements() then
+		return
+	end
+
 	-- Prompt the user for input
 	local summary = vim.fn.input("Summary: ")
 	local start_time = vim.fn.input("Start Time: ")
@@ -61,8 +87,8 @@ local function create_google_event_ui()
 	local file_path = "/tmp/neovim_google_event.yaml"
 	write_event_to_yaml(file_path, event_data)
 
-	-- Get the path to the current Lua script (relative to the plugin folder)
-	local script_dir = vim.fn.expand("<sfile>:p:h:h") -- Gets the plugin directory (lua/..)
+	-- Get the path to the Python script
+	local script_dir = vim.fn.expand("<sfile>:p:h:h")
 	local python_script_path = script_dir .. "/python/add_event.py"
 
 	-- Notify the user
@@ -74,6 +100,5 @@ end
 
 -- Create user command in Neovim to trigger the event creation UI
 vim.api.nvim_create_user_command("AddGoogleEventui", function()
-	-- Call the function that handles user input and event creation
 	create_google_event_ui()
 end, {})
