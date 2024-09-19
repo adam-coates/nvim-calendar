@@ -12,7 +12,9 @@ return {
 }
 ```
 
-- Use command `AddGoogleEventui to bring up the ui helper to add an event step-by-step
+- Use command `:AddGoogleEventui` to bring up the ui helper to add an event step-by-step
+
+  
 
 ## Add calendar event from a `yaml` 
 
