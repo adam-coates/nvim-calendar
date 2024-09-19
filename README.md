@@ -1,5 +1,6 @@
 ## Add Calendar event to google calendar from within neovim
 
+
 > Lua
 
 ```lua
@@ -25,8 +26,6 @@ OR
 
 Requires some python modules:
 
-Modules are automatically installed when first running the plugin 
-
 ```
 google-auth
 google-auth-oauthlib
@@ -35,6 +34,12 @@ google-api-python-client
 PyYAML
 dateparser
 ```
+
+Modules are automatically installed when first running the plugin or install them using:
+
+`pip install -r requirements.txt`
+
+
 
 To interact with Google Calendar, you’ll need access to the Google Calendar API:
 
@@ -45,3 +50,10 @@ To interact with Google Calendar, you’ll need access to the Google Calendar AP
 - Download the credentials in JSON format.
 
 Store `credentials.json` in `~/.cache/nvim-calendar-add`
+
+---
+
+## Development
+- [ ] Compatability for neovim on windows
+- [ ] Create more in-depth instructions on how to obtain `credentials.json`
+- [ ] create a full UI calendar in nvim
