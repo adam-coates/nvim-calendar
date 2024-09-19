@@ -12,7 +12,11 @@ return {
 }
 ```
 
+- Use command `AddGoogleEventui to bring up the ui helper to add an event step-by-step
+
 ## Add calendar event from a `yaml` 
+
+- Create your own user command to make a calendar event using `yaml`
 
 ```lua
 vim.api.nvim_create_user_command("AddGoogleEvent", function()
@@ -29,15 +33,15 @@ end, {})
 ---
 event:
   summary: "Bobs birthday"
-  start: "2024-09-19T20:00:00"
-  end: "2024-09-19T21:00:00"
+  start: "Tomorrow 8pm"
+  end: "Tomorrow 9pm"
   location: "bobs house"
   description: "Don't forget to get him a present"
   timezone: "CET"
   color: 7
 ---
 ```
-
+- Once the `yaml` is written carry out command `:AddGoogleEvent`
 
 ## Add time of events using natural language
 
