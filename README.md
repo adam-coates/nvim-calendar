@@ -12,6 +12,33 @@ return {
 }
 ```
 
+## Add calendar event from a `yaml` 
+
+```lua
+vim.api.nvim_create_user_command("AddGoogleEvent", function()
+	vim.cmd("write")
+
+	local file_path = vim.fn.expand("%:p")
+
+	vim.cmd("!python3 ~/.local/share/nvim/lazy/nvim-calendar-add/python/add_event.py " .. file_path)
+end, {})
+```
+### Example yaml
+
+```yaml
+---
+event:
+  summary: "Bobs birthday"
+  start: "2024-09-19T20:00:00"
+  end: "2024-09-19T21:00:00"
+  location: "bobs house"
+  description: "Don't forget to get him a present"
+  timezone: "CET"
+  color: 7
+---
+```
+
+
 ## Add time of events using natural language
 
 e.g.
