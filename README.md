@@ -25,6 +25,8 @@ OR
 
 Requires some python modules:
 
+Modules are automatically installed when first running the plugin 
+
 ```
 google-auth
 google-auth-oauthlib
