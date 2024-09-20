@@ -1,14 +1,12 @@
 local api = vim.api
 
 -- Define constants
-local months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
-local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-local week_days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" }
-
-local calendar_module = {}
+months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+week_days = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" }
 
 -- Check if year is leap
-function calendar_module.is_leap_year(year)
+function is_leap_year(year)
 	if year % 400 == 0 then
 		return true
 	elseif year % 100 == 0 then
@@ -21,8 +19,8 @@ function calendar_module.is_leap_year(year)
 end
 
 -- Get number of days in a given month of a year
-function calendar_module.get_days_in_month(month, year)
-	if month == 2 and calendar_module.is_leap_year(year) then
+function get_days_in_month(month, year)
+	if month == 2 and is_leap_year(year) then
 		return 29
 	else
 		return days_in_month[month]
@@ -30,7 +28,7 @@ function calendar_module.get_days_in_month(month, year)
 end
 
 -- Calculate day of the week for the 1st of a given month and year
-function calendar_module.calculate_start_day(month, year)
+function calculate_start_day(month, year)
 	local d = 1
 	local m = (month + 9) % 12 + 1
 	local y = year - math.floor((m - 3) / 10)
@@ -41,9 +39,9 @@ function calendar_module.calculate_start_day(month, year)
 end
 
 -- Create a string representing the calendar for a given month and year
-function calendar_module.create_month_calendar(month, year)
-	local days = calendar_module.get_days_in_month(month, year)
-	local start_day = calendar_module.calculate_start_day(month, year)
+function create_month_calendar(month, year)
+	local days = get_days_in_month(month, year)
+	local start_day = calculate_start_day(month, year)
 	local calendar = {}
 
 	local header = string.format("%s %d", months[month], year)
@@ -66,19 +64,13 @@ function calendar_module.create_month_calendar(month, year)
 end
 
 -- Setup mouse click mappings for the calendar
-function calendar_module.setup_day_click_mappings(buffer, start_month, start_year)
+function setup_day_click_mappings(buffer, start_month, start_year)
 	api.nvim_buf_clear_namespace(buffer, 0, 0, -1)
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"<CR>",
-		":lua require('nvim-calendar').on_day_click()<CR>",
-		{ noremap = true, silent = true }
-	)
+	api.nvim_buf_set_keymap(buffer, "n", "<CR>", ":lua on_day_click()<CR>", { noremap = true, silent = true })
 end
 
 -- Function to display multiple months in a buffer
-function calendar_module.display_calendar(start_month, start_year, months_to_show)
+function display_calendar(start_month, start_year, months_to_show)
 	local buffer = api.nvim_create_buf(false, true)
 
 	-- Set buffer options
@@ -88,7 +80,7 @@ function calendar_module.display_calendar(start_month, start_year, months_to_sho
 	for i = 0, months_to_show - 1 do
 		local current_month = (start_month + i - 1) % 12 + 1
 		local current_year = start_year + math.floor((start_month + i - 1) / 12)
-		local month_calendar = calendar_module.create_month_calendar(current_month, current_year)
+		local month_calendar = create_month_calendar(current_month, current_year)
 		vim.list_extend(calendar_content, month_calendar)
 		table.insert(calendar_content, "") -- Add an empty line between months
 	end
@@ -105,37 +97,25 @@ function calendar_module.display_calendar(start_month, start_year, months_to_sho
 	api.nvim_buf_set_var(buffer, "calendar_months_to_show", months_to_show)
 
 	-- Set key mappings for scrolling
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"j",
-		":lua require('nvim-calendar').next_month()<CR>",
-		{ noremap = true, silent = true }
-	)
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"k",
-		":lua require('nvim-calendar').prev_month()<CR>",
-		{ noremap = true, silent = true }
-	)
+	api.nvim_buf_set_keymap(buffer, "n", "j", ":lua next_month()<CR>", { noremap = true, silent = true })
+	api.nvim_buf_set_keymap(buffer, "n", "k", ":lua prev_month()<CR>", { noremap = true, silent = true })
 
 	-- Set up click mappings dynamically every time the calendar is displayed or refreshed
-	calendar_module.setup_day_click_mappings(buffer, start_month, start_year)
+	setup_day_click_mappings(buffer, start_month, start_year)
 end
 
 -- Function to show the calendar
-function calendar_module.show_calendar()
+function show_calendar()
 	local current_time = os.date("*t")
 	local month = current_time.month
 	local year = current_time.year
 
 	-- Display three months starting from the current month
-	calendar_module.display_calendar(month, year, 3)
+	display_calendar(month, year, 3)
 end
 
 -- Function to go to the next month
-function calendar_module.next_month()
+function next_month()
 	local buf = api.nvim_get_current_buf()
 	local start_month = api.nvim_buf_get_var(buf, "calendar_start_month")
 	local start_year = api.nvim_buf_get_var(buf, "calendar_start_year")
@@ -148,11 +128,11 @@ function calendar_module.next_month()
 		new_year = start_year + 1
 	end
 
-	calendar_module.display_calendar(new_month, new_year, months_to_show)
+	display_calendar(new_month, new_year, months_to_show)
 end
 
 -- Function to go to the previous month
-function calendar_module.prev_month()
+function prev_month()
 	local buf = api.nvim_get_current_buf()
 	local start_month = api.nvim_buf_get_var(buf, "calendar_start_month")
 	local start_year = api.nvim_buf_get_var(buf, "calendar_start_year")
@@ -165,11 +145,11 @@ function calendar_module.prev_month()
 		new_year = start_year - 1
 	end
 
-	calendar_module.display_calendar(new_month, new_year, months_to_show)
+	display_calendar(new_month, new_year, months_to_show)
 end
 
 -- Function to execute a Python script and capture the output
-function calendar_module.execute_python(script_path, day)
+function execute_python(script_path, day)
 	local command = string.format("python3 %s '%s'", script_path, day)
 	local handle = io.popen(command)
 	local result = handle:read("*a")
@@ -178,7 +158,7 @@ function calendar_module.execute_python(script_path, day)
 end
 
 -- Function to display events in a buffer
-function calendar_module.display_events(events)
+function display_events(events)
 	local event_buffer = api.nvim_create_buf(false, true)
 	local event_lines = {}
 
@@ -198,7 +178,7 @@ function calendar_module.display_events(events)
 end
 
 -- Function to handle clicking on a day
-function calendar_module.on_day_click()
+function on_day_click()
 	local buf = api.nvim_get_current_buf()
 	local cursor_pos = api.nvim_win_get_cursor(0)
 	local line = cursor_pos[1] - 1
@@ -244,10 +224,10 @@ function calendar_module.on_day_click()
 		local python_script_path = plugin_dir .. "/scripts/get_events.py"
 
 		-- Execute the Python script and get events
-		local events = calendar_module.execute_python(python_script_path, clicked_date)
+		local events = execute_python(python_script_path, clicked_date)
 
 		-- Display the events in a new buffer
-		calendar_module.display_events(events)
+		display_events(events)
 	else
 		print("No valid day selected.")
 	end
@@ -255,8 +235,5 @@ end
 
 -- Create the Calendar command
 vim.api.nvim_create_user_command("ShowCalendar", function()
-	calendar_module.show_calendar()
+	show_calendar()
 end, { nargs = 0 })
-
--- Return the module
-return calendar_module
