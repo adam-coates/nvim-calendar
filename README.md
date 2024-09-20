@@ -1,6 +1,6 @@
 ## Add Calendar event to google calendar from within neovim
 
-<u>Written in lua and python. </u>
+*Written in lua and python. *
 
 > Lua
 
