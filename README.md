@@ -1,19 +1,21 @@
 ## Add Calendar event to google calendar from within neovim
 
+<u>Written in lua and python. </u>
 
 > Lua
 
 ```lua
 return {
-    'adam-coates/neovim-google-event-plugin',
-    config = function()
-        require('google_event_plugin')
-    end
+	"adam-coates/nvim-calendar",
+	config = function()
+		require("nvim-calendar")
+	end,
 }
 ```
 
 - Use command `:AddGoogleEventui` to bring up the ui helper to add an event step-by-step
 
+- Use command `:Showcalendar` to bring up a calendar ui. Select a date from the calendar to view the events on that day
   
 
 ## Add calendar event from a `yaml` 
@@ -90,4 +92,4 @@ Store `credentials.json` in `~/.cache/nvim-calendar-add`
 - [ ] Compatability for neovim on windows
 - [ ] Support for more than 1 calendar 
 - [ ] Create more in-depth instructions on how to obtain `credentials.json` in README.md
-- [ ] create a full UI calendar in nvim written in lua
+- [-] create a full UI calendar in nvim written in lua
