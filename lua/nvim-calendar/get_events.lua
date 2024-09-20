@@ -69,13 +69,7 @@ local function setup_day_click_mappings(buffer, start_month, start_year)
 	api.nvim_buf_clear_namespace(buffer, 0, 0, -1)
 
 	-- Set mapping for Enter key to use the selected day based on cursor position
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"<CR>",
-		":lua require('nvim-calendar.get-events').on_day_click()<CR>",
-		{ noremap = true, silent = true }
-	)
+	api.nvim_buf_set_keymap(buffer, "n", "<CR>", ":lua on_day_click()<CR>", { noremap = true, silent = true })
 end
 
 -- Function to display multiple months in a buffer
@@ -106,20 +100,8 @@ local function display_calendar(start_month, start_year, months_to_show)
 	api.nvim_buf_set_var(buffer, "calendar_months_to_show", months_to_show)
 
 	-- Set key mappings for scrolling
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"j",
-		":lua require('nvim-calendar.get-events').next_month()<CR>",
-		{ noremap = true, silent = true }
-	)
-	api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"k",
-		":lua require('nvim-calendar.get-events').prev_month()<CR>",
-		{ noremap = true, silent = true }
-	)
+	api.nvim_buf_set_keymap(buffer, "n", "j", ":lua next_month()<CR>", { noremap = true, silent = true })
+	api.nvim_buf_set_keymap(buffer, "n", "k", ":lua prev_month()<CR>", { noremap = true, silent = true })
 
 	-- Set up click mappings dynamically every time the calendar is displayed or refreshed
 	setup_day_click_mappings(buffer, start_month, start_year)
