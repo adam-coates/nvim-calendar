@@ -66,7 +66,13 @@ end
 -- Setup mouse click mappings for the calendar
 function setup_day_click_mappings(buffer, start_month, start_year)
 	api.nvim_buf_clear_namespace(buffer, 0, 0, -1)
-	api.nvim_buf_set_keymap(buffer, "n", "<CR>", ":lua on_day_click()<CR>", { noremap = true, silent = true })
+	api.nvim_buf_set_keymap(
+		buffer,
+		"n",
+		"<CR>",
+		":lua require('nvim-calendar').on_day_click()<CR>",
+		{ noremap = true, silent = true }
+	)
 end
 
 -- Function to display multiple months in a buffer
