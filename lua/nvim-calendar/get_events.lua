@@ -73,7 +73,7 @@ local function setup_day_click_mappings(buffer, start_month, start_year)
 		buffer,
 		"n",
 		"<CR>",
-		":lua require('adam.plugins.calendar').on_day_click()<CR>",
+		":lua require('nvim-calendar').on_day_click()<CR>",
 		{ noremap = true, silent = true }
 	)
 end
@@ -110,14 +110,14 @@ local function display_calendar(start_month, start_year, months_to_show)
 		buffer,
 		"n",
 		"j",
-		":lua require('adam.plugins.calendar').next_month()<CR>",
+		":lua require('nvim-calendar').next_month()<CR>",
 		{ noremap = true, silent = true }
 	)
 	api.nvim_buf_set_keymap(
 		buffer,
 		"n",
 		"k",
-		":lua require('adam.plugins.calendar').prev_month()<CR>",
+		":lua require('nvim-calendar').prev_month()<CR>",
 		{ noremap = true, silent = true }
 	)
 
