@@ -89,8 +89,11 @@ Store `credentials.json` in `~/.cache/nvim-calendar-add`
 ---
 
 ## Development
+```[tasklist]
+- [ ] create a full UI calendar in nvim written in lua (in progress)
+- [ ] [Prevent double buffering opening](https://github.com/adam-coates/nvim-calendar/issues/1)
 - [ ] Compatability for neovim on windows
 - [ ] Support for more than 1 calendar 
 - [ ] Create more in-depth instructions on how to obtain `credentials.json` in README.md
-- [ - ] create a full UI calendar in nvim written in lua (in progress)
-  - #1
+```
+
