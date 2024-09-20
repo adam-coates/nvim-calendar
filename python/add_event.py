@@ -13,10 +13,10 @@ from pathlib import Path
 if os.name == "nt":  # For Windows
     base_cache_dir = (
         Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
-        / "nvim-calendar-add"
+        / "nvim-calendar"
     )
 else:  # For Linux/macOS
-    base_cache_dir = Path.home() / ".cache" / "nvim-calendar-add"
+    base_cache_dir = Path.home() / ".cache" / "nvim-calendar"
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 

@@ -7,15 +7,23 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from datetime import datetime, timedelta
 from pathlib import Path
 
+if os.name == "nt":  # For Windows
+    base_cache_dir = (
+        Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+        / "nvim-calendar"
+    )
+else:  # For Linux/macOS
+    base_cache_dir = Path.home() / ".cache" / "nvim-calendar"
+
+
 # Paths and scopes
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
-base_cache_dir = Path.home() / ".cache" / "nvim-calendar-add"
-credentials_path = base_cache_dir / "credentials.json"
-token_path = base_cache_dir / "token.json"
 
 
 def authenticate_google():
     creds = None
+    credentials_path = base_cache_dir / "credentials.json"
+    token_path = base_cache_dir / "token.json"
     if os.path.exists(token_path):
         creds = Credentials.from_authorized_user_file(token_path, SCOPES)
     if not creds or not creds.valid:

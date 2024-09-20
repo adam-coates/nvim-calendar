@@ -41,7 +41,7 @@ local function check_and_install_requirements()
 		return false
 	end
 
-	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar-add"
+	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar"
 	-- Path to the Python requirements.txt file
 	local requirements_path = plugin_dir .. "/python/requirements.txt"
 
@@ -118,7 +118,7 @@ local function create_google_event_ui()
 
 	-- Get the path to the Python script
 	--local script_dir = vim.fn.expand("<sfile>:p:h:h")
-	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar-add"
+	local plugin_dir = vim.fn.stdpath("data") .. "/lazy/nvim-calendar"
 	local python_script_path = plugin_dir .. "/python/add_event.py"
 	--	local python_script_path = script_dir .. "/python/add_event.py"
 
