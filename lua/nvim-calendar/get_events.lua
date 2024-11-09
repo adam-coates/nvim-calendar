@@ -80,4 +80,3 @@ end
 vim.api.nvim_create_user_command("ShowEvents", function()
     fetch_and_show_events()
 end, { nargs = 0 })
-l
