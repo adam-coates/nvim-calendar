@@ -70,6 +70,7 @@ Go to the Credentials page from the sidebar.
 3. Run gcalcli init
 
     2a. enter google client id 
+
     2b. enter google client secret
 
 4. Run `gcalcli list` to check calendars are showing up
@@ -81,7 +82,7 @@ Go to the Credentials page from the sidebar.
 ```[tasklist]
 - [~] Events are now written to telescope ~create a full UI calendar in nvim written in lua (in progress)~
 - [ ] https://github.com/adam-coates/nvim-calendar/issues/1
-- [ ] Compatability for neovim on windows
+- [x] (not checked but should be) Compatability for neovim on windows
 - [x] Support for more than 1 calendar 
 - [x] Create more in-depth instructions on how to obtain `credentials.json` in README.md
 ```
